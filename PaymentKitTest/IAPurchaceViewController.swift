@@ -10,7 +10,7 @@ import UIKit
 
 import StoreKit
 
-class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProductsRequestDelegate {
+class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProductsRequestDelegate, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -72,6 +72,13 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
         }   else {
             print("There are no products.")
         }
+    }
+    
+    //MARK: UITableViewDelegate functions
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        let product = self.productsArray[indexPath.row]
+        
     }
     
     //MARK: UITableViewDataSource functions
