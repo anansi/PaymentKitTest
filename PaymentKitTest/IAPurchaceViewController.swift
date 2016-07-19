@@ -10,7 +10,7 @@ import UIKit
 
 import StoreKit //TODO note that the StoreKit has already been imported for this activity
 
-class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,SKProductsRequestDelegate {
+class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,SKProductsRequestDelegate, SKPaymentTransactionObserver {
 
     
     //TODO you will need to use the variable, productIdentifiers to fetch the IAP products from the app store
@@ -29,6 +29,8 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITable
         
         //TODO Starting point: fill in the code to fetch the products sold in this app
         self.requestProductInfo()
+        
+        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
     }
     
     
@@ -81,10 +83,35 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITable
     
     func purchaseProduct(product:SKProduct) {
         //TODO complete this in activity 2
-        
+        print ("when 'buy' is tapped, this function is called of the relivant product")
+        let payment = SKPayment(product:product as SKProduct)
+        SKPaymentQueue.defaultQueue().addPayment(payment)
+        self.transactionInProgress = true
     }
     
     
+    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        
+        for transaction in transactions as! [SKPaymentTransaction] {
+            switch transaction.transactionState {
+            case SKPaymentTransactionState.Purchased:
+                print("Transaction completed successfully.")
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+                transactionInProgress = false
+                //delegate.didBuyColorsCollection(selectedProductIndex)
+                
+                
+            case SKPaymentTransactionState.Failed:
+                print("Transaction Failed");
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+                transactionInProgress = false
+                
+            default:
+                print(transaction.transactionState.rawValue)
+            }
+        }
+    }
+
     
 
 //You can view the code below this line if you like, but you do not need to modify it in anyway for this activity
