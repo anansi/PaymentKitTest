@@ -20,7 +20,8 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITable
         resultSet.insert("waykn.ammo")
         return resultSet
     }
-    
+    //Note. this is the array to store fetched products in
+    var productsArray:Array<SKProduct!>  = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +70,7 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var tableView: UITableView!
     var transactionInProgress:Bool = false
     var hasFetchedResults:Bool = false
-    var productsArray = []
+    
     
     func initViewControllerDisplay()    {
         //initial the tableview
