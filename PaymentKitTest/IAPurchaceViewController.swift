@@ -10,13 +10,13 @@ import UIKit
 
 import StoreKit
 
-class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProductsRequestDelegate, UITableViewDelegate {
+class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProductsRequestDelegate, UITableViewDelegate,SKPaymentTransactionObserver {
 
     @IBOutlet weak var tableView: UITableView!
     var transactionInProgress:Bool = false
     var hasFetchedResults = false
     let productIdentifiers: Set = Set<String>()
-    var productIDs: Array<String!> = ["waykn_subscription_product"]
+    var productIDs: Array<String!> = []
     var productsArray: Array<SKProduct!> = []
     
     override func viewDidLoad() {
@@ -29,6 +29,9 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
         self.title = "In App Purchases"
         //show the navigation bar again 
         self.navigationController?.navigationBarHidden = false
+        
+        //
+        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
         
         // Do any additional setup after loading the view.
         self.requestProductInfo()
@@ -43,8 +46,9 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
     func requestProductInfo() {
         if SKPaymentQueue.canMakePayments() {
             var productIdentifiers = Set<String>()
-            productIdentifiers.insert("waykn_subscription_product")
+            
             productIdentifiers.insert("waykn.twin.cannon")
+            productIdentifiers.insert("waykn.ammo")
             
             let productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
             
@@ -160,6 +164,29 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
             
             
             return cell
+        }
+        
+    }
+    
+    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        
+        for transaction in transactions as! [SKPaymentTransaction] {
+            switch transaction.transactionState {
+            case SKPaymentTransactionState.Purchased:
+                print("Transaction completed successfully.")
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+                transactionInProgress = false
+                //delegate.didBuyColorsCollection(selectedProductIndex)
+                
+                
+            case SKPaymentTransactionState.Failed:
+                print("Transaction Failed");
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+                transactionInProgress = false
+                
+            default:
+                print(transaction.transactionState.rawValue)
+            }
         }
         
     }
