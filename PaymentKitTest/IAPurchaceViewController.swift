@@ -8,15 +8,14 @@
 
 import UIKit
 
-import StoreKit
+import StoreKit //TODO note that the StoreKit has already been imported for this activity 
 
 class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     var transactionInProgress:Bool = false
     var hasFetchedResults = false
-    let productIdentifiers: Set = Set<String>()
-    var productIDs: Array<String!> = []
+    
     var productsArray = []
     
     override func viewDidLoad() {
@@ -27,17 +26,36 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITable
         self.requestProductInfo()
     }
     
-    //Your First function to implement
+    
     func requestProductInfo() {
         if SKPaymentQueue.canMakePayments() {
             print("In requestProductInfo() - canMakePayments() = true")
+            //TODO 
+            //1 - Create a Set of strings representing IAP products as defined in iTunes Connect
             
+
+            //TODO
+            //2 - Create an SKProductRequest object
+            //    set the product identifiers to be fetched
+            //    set the delegate of the SKProductRequest object to this ViewController and implement the protocol. It will allow you to handle receipt of the products
+            //    finally, make the product request fetch the products from the App Store
+
+            
+            //TODO remove these 2 lines of code, they are here to indicate that you need to fetch the products from iTunes Connect
             self.hasFetchedResults = true
             tableView.reloadData()
         } else {
             print("In requestProductInfo() - Cannot perform In App Purchases.")
         }
     }
+    
+    //TODO
+    //3 - Implement the protocol (delegate) functions required for the SKProductRequest
+    
+    
+    
+    
+    
     
 
 //You can view the code below this line if you like, but you do not need to modify it in anyway for this activity
