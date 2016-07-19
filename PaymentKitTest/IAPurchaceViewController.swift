@@ -8,15 +8,19 @@
 
 import UIKit
 
-import StoreKit //TODO note that the StoreKit has already been imported for this activity 
+import StoreKit //TODO note that the StoreKit has already been imported for this activity
 
 class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    @IBOutlet weak var tableView: UITableView!
-    var transactionInProgress:Bool = false
-    var hasFetchedResults = false
     
-    var productsArray = []
+    //TODO you will need to use the variable, productIdentifiers to fetch the IAP products from the app store
+    var productIdentifiers:Set<String>  {
+        var resultSet = Set<String>()
+        resultSet.insert("waykn.twin.cannon")
+        resultSet.insert("waykn.ammo")
+        return resultSet
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +66,10 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITable
 //Hint: focus on the TODO items in this file
 //------------------------------------------------------------------------------------------------------------------------------
 
+    @IBOutlet weak var tableView: UITableView!
+    var transactionInProgress:Bool = false
+    var hasFetchedResults:Bool = false
+    var productsArray = []
     
     func initViewControllerDisplay()    {
         //initial the tableview
