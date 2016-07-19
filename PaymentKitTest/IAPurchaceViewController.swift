@@ -13,7 +13,7 @@ import StoreKit
 class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProductsRequestDelegate, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
-    
+    var transactionInProgress:Bool = false
     var hasFetchedResults = false
     let productIdentifiers: Set = Set<String>()
     var productIDs: Array<String!> = ["waykn_subscription_product"]
@@ -24,6 +24,7 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
 
         //initial the tableview
         tableView.dataSource = self
+        tableView.delegate = self
         //set view controller title 
         self.title = "In App Purchases"
         //show the navigation bar again 
@@ -74,11 +75,36 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
         }
     }
     
+    func showActions(product:SKProduct) {
+        if transactionInProgress {
+            return
+        }
+        
+        let actionSheetController = UIAlertController(title: "Do you want to process with purchase of:", message: "\(product.localizedTitle)?", preferredStyle: UIAlertControllerStyle.ActionSheet)
+        
+        let buyAction = UIAlertAction(title: "Buy", style: UIAlertActionStyle.Default) { (action) -> Void in
+            let payment = SKPayment(product:product as SKProduct)
+            SKPaymentQueue.defaultQueue().addPayment(payment)
+            self.transactionInProgress = true
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { (action) -> Void in
+            
+        }
+        
+        actionSheetController.addAction(buyAction)
+        actionSheetController.addAction(cancelAction)
+        
+        presentViewController(actionSheetController, animated: true, completion: nil)
+    }
+    
     //MARK: UITableViewDelegate functions
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let product = self.productsArray[indexPath.row]
         
+        showActions(product)
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     //MARK: UITableViewDataSource functions
