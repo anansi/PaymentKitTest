@@ -18,8 +18,7 @@ class LandingViewController: UIViewController {
         self.title = "Home"
         
         
-        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Organize, target: self, action: "storeButtonTapped"), animated: true)
-        //var storeButton = UIBarButtonItem("Store",target: self,action: "storeButtonTapped")
+        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Organize, target: self, action: #selector(LandingViewController.storeButtonTapped)), animated: true)
     }
 
     
