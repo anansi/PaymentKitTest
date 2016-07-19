@@ -17,16 +17,16 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WDG-R7-AQM">
-                    <rect key="frame" x="0.0" y="118" width="600" height="482"/>
+                    <rect key="frame" x="17" y="8" width="583" height="592"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="WDG-R7-AQM" secondAttribute="bottom" id="O4f-LY-Aum"/>
-                <constraint firstItem="WDG-R7-AQM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="aJe-eK-oub"/>
+                <constraint firstItem="WDG-R7-AQM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="17" id="aJe-eK-oub"/>
                 <constraint firstAttribute="trailing" secondItem="WDG-R7-AQM" secondAttribute="trailing" id="j9H-Wo-QcQ"/>
-                <constraint firstItem="WDG-R7-AQM" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="118" id="xB1-qe-5rL"/>
+                <constraint firstItem="WDG-R7-AQM" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="xB1-qe-5rL"/>
             </constraints>
         </view>
     </objects>

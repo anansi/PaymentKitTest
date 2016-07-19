@@ -14,7 +14,12 @@ class LandingViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.navigationController
+        //set view controller title
+        self.title = "Home"
+        
+        
+        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Organize, target: self, action: "storeButtonTapped"), animated: true)
+        //var storeButton = UIBarButtonItem("Store",target: self,action: "storeButtonTapped")
     }
 
     
@@ -23,20 +28,11 @@ class LandingViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func storeButtonTapped(sender: AnyObject) {
+    
+    func storeButtonTapped() {
         
         let storeViewControler = IAPurchaceViewController(nibName: "IAPurchaceViewController", bundle: nil)
         self.navigationController?.pushViewController(storeViewControler, animated: true)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

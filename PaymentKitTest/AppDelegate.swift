@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let landingView = LandingViewController(nibName: "LandingViewController", bundle: nil)
         let navControl = UINavigationController(rootViewController:landingView)
-        navControl.navigationBarHidden = true
+        
         //Set initial navController
         self.window?.rootViewController = navControl
         self.window?.makeKeyAndVisible()

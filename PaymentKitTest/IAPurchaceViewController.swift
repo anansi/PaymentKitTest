@@ -14,6 +14,7 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
 
     @IBOutlet weak var tableView: UITableView!
     
+    var hasFetchedResults = false
     let productIdentifiers: Set = Set<String>()
     var productIDs: Array<String!> = ["waykn_subscription_product"]
     var productsArray: Array<SKProduct!> = []
@@ -23,6 +24,10 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
 
         //initial the tableview
         tableView.dataSource = self
+        //set view controller title 
+        self.title = "In App Purchases"
+        //show the navigation bar again 
+        self.navigationController?.navigationBarHidden = false
         
         // Do any additional setup after loading the view.
         self.requestProductInfo()
@@ -54,12 +59,15 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
     
     func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse)   {
         
+        self.hasFetchedResults = true
         if response.products.count != 0 {
             for product in response.products {
                 print(product.localizedTitle)
                 print(product.localizedDescription)
                 productsArray.append(product)
             }
+            
+            
             self.tableView.reloadData()
         }   else {
             print("There are no products.")
@@ -68,24 +76,59 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
     
     //MARK: UITableViewDataSource functions
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1//self.productsArray.count
+        
+        if (self.productsArray.count != 0)   {
+            return self.productsArray.count
+        }   else    {
+            return 1
+        }
+        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = UITableViewCell()
+        if (self.productsArray.count != 0) {
+            
+            let product = self.productsArray[indexPath.row]
+            
+            let cell = UITableViewCell()
+            
+            let headingLabel = UILabel(frame:CGRectMake(0,0, cell.frame.width, cell.frame.height * 0.5))
+            headingLabel.text = product.localizedTitle
+            
+            let subheadingLabel = UILabel(frame:CGRectMake(0,10, cell.frame.width, cell.frame.height))
+            
+            subheadingLabel.font = UIFont.systemFontOfSize(CGFloat(12))
+            subheadingLabel.text = product.localizedDescription
+            
+            cell.addSubview(headingLabel)
+            cell.addSubview(subheadingLabel)
+            
+            return cell
+
+        }   else    {
+            
+            let cell = UITableViewCell()
+            
+            let headingLabel = UILabel(frame:CGRectMake(0,0, cell.frame.width, cell.frame.height * 0.5))
+            
+            if(hasFetchedResults)    {
+                headingLabel.text = "No in app purchase items found :("
+            }   else    {
+                headingLabel.text = "Fetching in app purchases..."
+            }
+            
+            
+            let subheadingLabel = UILabel(frame:CGRectMake(0,10, cell.frame.width, cell.frame.height))
+            
+            
+            
+            cell.addSubview(headingLabel)
+            
+            
+            return cell
+        }
         
-        let headingLabel = UILabel(frame:CGRectMake(0,0, cell.frame.width, cell.frame.height * 0.5))
-        headingLabel.text = "Heading"
-        let subheadingLabel = UILabel(frame:CGRectMake(0,10, cell.frame.width, cell.frame.height))
-        
-        subheadingLabel.font = UIFont.systemFontOfSize(CGFloat(12))
-        subheadingLabel.text = "Subheading text goes here"
-        
-        cell.addSubview(headingLabel)
-        cell.addSubview(subheadingLabel)
-        
-        return cell
     }
     
 }
