@@ -10,75 +10,49 @@ import UIKit
 
 import StoreKit
 
-class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProductsRequestDelegate, UITableViewDelegate,SKPaymentTransactionObserver {
+class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     var transactionInProgress:Bool = false
     var hasFetchedResults = false
     let productIdentifiers: Set = Set<String>()
     var productIDs: Array<String!> = []
-    var productsArray: Array<SKProduct!> = []
+    var productsArray = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.initViewControllerDisplay()
+        
+        //TODO Starting point: fill in the code to fetch the products sold in this app
+        self.requestProductInfo()
+    }
+    
+    //Your First function to implement
+    func requestProductInfo() {
+        if SKPaymentQueue.canMakePayments() {
+            print("In requestProductInfo() - canMakePayments() = true")
+            
+            self.hasFetchedResults = true
+            tableView.reloadData()
+        } else {
+            print("In requestProductInfo() - Cannot perform In App Purchases.")
+        }
+    }
+    
 
+//You can view the code below this line if you like, but you do not need to modify it in anyway for this activity
+//Hint: focus on the TODO items in this file
+//------------------------------------------------------------------------------------------------------------------------------
+
+    
+    func initViewControllerDisplay()    {
         //initial the tableview
         tableView.dataSource = self
         tableView.delegate = self
-        //set view controller title 
+        //set view controller title
         self.title = "In App Purchases"
-        //show the navigation bar again 
-        self.navigationController?.navigationBarHidden = false
-        
-        //
-        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
-        
-        // Do any additional setup after loading the view.
-        self.requestProductInfo()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
-    func requestProductInfo() {
-        if SKPaymentQueue.canMakePayments() {
-            var productIdentifiers = Set<String>()
-            
-            productIdentifiers.insert("waykn.twin.cannon")
-            productIdentifiers.insert("waykn.ammo")
-            
-            let productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
-            
-            productsRequest.delegate = self
-            productsRequest.start()
-
-         
-        }
-        else {
-            print("Cannot perform In App Purchases.")
-        }
-    }
-    
-    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse)   {
-        
-        self.hasFetchedResults = true
-        if response.products.count != 0 {
-            for product in response.products {
-                print(product.localizedTitle)
-                print(product.localizedDescription)
-                productsArray.append(product)
-            }
-            
-            
-            self.tableView.reloadData()
-        }   else {
-            print("There are no products.")
-        }
-    }
-    
     func showActions(product:SKProduct) {
         if transactionInProgress {
             return
@@ -107,7 +81,7 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
         
         let product = self.productsArray[indexPath.row]
         
-        showActions(product)
+        showActions(product as! SKProduct)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
@@ -132,12 +106,9 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
             
             let headingLabel = UILabel(frame:CGRectMake(0,0, cell.frame.width, cell.frame.height * 0.5))
             headingLabel.text = product.localizedTitle
-            
             let subheadingLabel = UILabel(frame:CGRectMake(0,10, cell.frame.width, cell.frame.height))
-            
             subheadingLabel.font = UIFont.systemFontOfSize(CGFloat(12))
             subheadingLabel.text = product.localizedDescription
-            
             cell.addSubview(headingLabel)
             cell.addSubview(subheadingLabel)
             
@@ -146,7 +117,6 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
         }   else    {
             
             let cell = UITableViewCell()
-            
             let headingLabel = UILabel(frame:CGRectMake(0,0, cell.frame.width, cell.frame.height * 0.5))
             
             if(hasFetchedResults)    {
@@ -155,38 +125,10 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, SKProdu
                 headingLabel.text = "Fetching in app purchases..."
             }
             
-            
             let subheadingLabel = UILabel(frame:CGRectMake(0,10, cell.frame.width, cell.frame.height))
-            
-            
-            
             cell.addSubview(headingLabel)
-            
-            
+
             return cell
-        }
-        
-    }
-    
-    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        
-        for transaction in transactions as! [SKPaymentTransaction] {
-            switch transaction.transactionState {
-            case SKPaymentTransactionState.Purchased:
-                print("Transaction completed successfully.")
-                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
-                transactionInProgress = false
-                //delegate.didBuyColorsCollection(selectedProductIndex)
-                
-                
-            case SKPaymentTransactionState.Failed:
-                print("Transaction Failed");
-                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
-                transactionInProgress = false
-                
-            default:
-                print(transaction.transactionState.rawValue)
-            }
         }
         
     }
