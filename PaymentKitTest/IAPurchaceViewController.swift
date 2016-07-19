@@ -10,7 +10,7 @@ import UIKit
 
 import StoreKit //TODO note that the StoreKit has already been imported for this activity
 
-class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,SKProductsRequestDelegate {
+class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITableViewDelegate    {
 
     
     //TODO you will need to use the variable, productIdentifiers to fetch the IAP products from the app store
@@ -41,18 +41,14 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITable
 
             //TODO
             //2 - Create an SKProductRequest object
-            //    set the product identifiers to be fetched
+            //    set the product identifiers to be fetched (these identifiers are stored as a variable belonging to the class)
             //    set the delegate of the SKProductRequest object to this ViewController and implement the protocol. It will allow you to handle receipt of the products
             //    finally, make the product request fetch the products from the App Store
-            let productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
-            
-            productsRequest.delegate = self
-            productsRequest.start()
-
+         
             
             //TODO remove these 2 lines of code, they are here to indicate that you need to fetch the products from iTunes Connect
-//            self.hasFetchedResults = true
-//            tableView.reloadData()
+            self.hasFetchedResults = true
+            tableView.reloadData()
         } else {
             print("In requestProductInfo() - Cannot perform In App Purchases.")
         }
@@ -61,25 +57,11 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITable
     //TODO
     //3 - Implement the protocol (delegate) functions required for the SKProductRequest
     
-    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse)   {
+    
+    func purchaseProduct(product:SKProduct) {
+        //TODO complete this in activity 2
         
-        self.hasFetchedResults = true
-        if response.products.count != 0 {
-            for product in response.products {
-                print(product.localizedTitle)
-                print(product.localizedDescription)
-                productsArray.append(product)
-            }
-            
-            
-            self.tableView.reloadData()
-        }   else {
-            print("There are no products.")
-        }
     }
-
-    
-    
     
     
     
@@ -109,9 +91,7 @@ class IAPurchaceViewController: UIViewController, UITableViewDataSource, UITable
         let actionSheetController = UIAlertController(title: "Do you want to process with purchase of:", message: "\(product.localizedTitle)?", preferredStyle: UIAlertControllerStyle.ActionSheet)
         
         let buyAction = UIAlertAction(title: "Buy", style: UIAlertActionStyle.Default) { (action) -> Void in
-            let payment = SKPayment(product:product as SKProduct)
-            SKPaymentQueue.defaultQueue().addPayment(payment)
-            self.transactionInProgress = true
+            self.purchaseProduct(product)
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { (action) -> Void in
